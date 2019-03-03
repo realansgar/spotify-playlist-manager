@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import $ from "jquery";
-
 export default {
   name: "LoginPanel",
   data: function() {
@@ -23,7 +21,11 @@ export default {
         redirect_uri: this.redirectUrl,
         scope: this.scopes.join(" ")
       };
-      return `${this.baseUrl}?${$.param(params)}`;
+      let url = new URL(this.baseUrl);
+      for (let [key, value] of Object.entries(params)) {
+        url.searchParams.append(key, value);
+      }
+      return url;
     }
   }
 };
