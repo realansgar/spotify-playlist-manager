@@ -1,20 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-    <LoginPanel></LoginPanel>
+    <AppPage v-if="accessToken" :accessToken="accessToken" />
+    <MainPage v-else />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-import LoginPanel from "./components/LoginPanel";
+import MainPage from "./pages/MainPage";
+import AppPage from "./pages/AppPage";
 
 export default {
   name: "app",
   components: {
-    LoginPanel,
-    HelloWorld
+    AppPage,
+    MainPage
+  },
+  computed: {
+    accessToken: function() {
+      return document.cookie.replace(
+        /(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,
+        "$1"
+      );
+    }
   }
 };
 </script>
