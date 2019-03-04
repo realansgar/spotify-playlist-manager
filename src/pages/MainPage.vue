@@ -1,17 +1,18 @@
 <template>
   <div>
-    Login here:
-    <LoginPanel />
+    <b-container>
+      <LoginCard />
+    </b-container>
   </div>
 </template>
 
 <script>
-import LoginPanel from "../components/LoginPanel";
+import LoginCard from "../components/LoginCard";
 
 export default {
   name: "LoginPage",
   components: {
-    LoginPanel
+    LoginCard
   }
 };
 </script>

@@ -1,72 +1,81 @@
 <template>
   <b-list-group>
-    <b-list-group-item>
+    <AppButtonListItem>
       Modify your public playlists
-      <span
-        v-b-tooltip.hover
-        title="The app needs this permission to save your result playlist!"
-      >
-        <ToggleButton :value="true" disabled="true" />
-      </span>
-    </b-list-group-item>
-    <b-list-group-item>
-      Read up to 50 of your recently played songs<span
-        ><ToggleButton
+      <template v-slot:button>
+        <div
+          v-b-tooltip.hover
+          title="The app needs this permission to save your result playlist!"
+        >
+          <ToggleButton class="no-margin-bottom" :value="true" disabled="true" />
+        </div>
+      </template>
+    </AppButtonListItem>
+    <AppButtonListItem>
+      Read up to 50 of your recently played songs
+      <template v-slot:button>
+        <ToggleButton class="no-margin-bottom"
           :value="scopes.userReadRecentlyPlayed"
           @input="scopes.userReadRecentlyPlayed = $event"
           sync
-      /></span>
-    </b-list-group-item>
-    <b-list-group-item>
-      Read your top artists and songs<span
-        ><ToggleButton
+        />
+      </template>
+    </AppButtonListItem>
+    <AppButtonListItem>
+      Read your top artists and songs
+      <template v-slot:button>
+        <ToggleButton class="no-margin-bottom"
           :value="scopes.userTopRead"
           @input="scopes.userTopRead = $event"
           sync
-      /></span>
-    </b-list-group-item>
-    <b-list-group-item>
+        />
+      </template>
+    </AppButtonListItem>
+    <AppButtonListItem>
       Read your saved songs
-      <span
-        ><ToggleButton
+      <template v-slot:button>
+        <ToggleButton class="no-margin-bottom"
           :value="scopes.userLibraryRead"
           @input="scopes.userLibraryRead = $event"
           sync
-      /></span>
-    </b-list-group-item>
-    <b-list-group-item>
+      /></template>
+    </AppButtonListItem>
+    <AppButtonListItem>
       Read your followed artists
-      <span
-        ><ToggleButton
+      <template v-slot:button
+        ><ToggleButton class="no-margin-bottom"
           :value="scopes.userFollowRead"
           @input="scopes.userFollowRead = $event"
           sync
-      /></span>
-    </b-list-group-item>
-    <b-list-group-item>
+      /></template>
+    </AppButtonListItem>
+    <AppButtonListItem>
       Read your private playlists
-      <span
-        ><ToggleButton
+      <template v-slot:button
+        ><ToggleButton class="no-margin-bottom"
           :value="scopes.playlistReadPrivate"
           @input="scopes.playlistReadPrivate = $event"
           sync
-      /></span>
-    </b-list-group-item>
-    <b-list-group-item>
+      /></template>
+    </AppButtonListItem>
+    <AppButtonListItem>
       Read your collaborative playlists
-      <span
-        ><ToggleButton
+      <template v-slot:button>
+        <ToggleButton class="no-margin-bottom"
           :value="scopes.playlistReadCollaborative"
           @input="scopes.playlistReadCollaborative = $event"
           sync
-      /></span>
-    </b-list-group-item>
+        />
+      </template>
+    </AppButtonListItem>
   </b-list-group>
 </template>
 
 <script>
+import AppButtonListItem from "../basecomponents/AppButtonListItem";
 export default {
   name: "LoginPanel",
+  components: { AppButtonListItem },
   data: function() {
     return {
       clientId: "bc334213f1d743b883dabe0d47e4422e",
@@ -126,5 +135,9 @@ export default {
 <style scoped>
 span {
   float: right;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0px;
 }
 </style>

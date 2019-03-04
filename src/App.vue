@@ -16,7 +16,7 @@ export default {
     MainPage
   },
   computed: {
-    accessToken: function() {
+    accessToken() {
       return document.cookie.replace(
         /(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,
         "$1"
