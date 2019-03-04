@@ -11,29 +11,55 @@
     </b-list-group-item>
     <b-list-group-item>
       Read up to 50 of your recently played songs<span
-        ><ToggleButton v-model="scopes.userReadRecentlyPlayed"
+        ><ToggleButton
+          :value="scopes.userReadRecentlyPlayed"
+          @input="scopes.userReadRecentlyPlayed = $event"
+          sync
       /></span>
     </b-list-group-item>
     <b-list-group-item>
       Read your top artists and songs<span
-        ><ToggleButton v-model="scopes.userTopRead"
+        ><ToggleButton
+          :value="scopes.userTopRead"
+          @input="scopes.userTopRead = $event"
+          sync
       /></span>
     </b-list-group-item>
     <b-list-group-item>
       Read your saved songs
-      <span><ToggleButton v-model="scopes.userLibraryRead"/></span>
+      <span
+        ><ToggleButton
+          :value="scopes.userLibraryRead"
+          @input="scopes.userLibraryRead = $event"
+          sync
+      /></span>
     </b-list-group-item>
     <b-list-group-item>
       Read your followed artists
-      <span><ToggleButton v-model="scopes.userFollowRead"/></span>
+      <span
+        ><ToggleButton
+          :value="scopes.userFollowRead"
+          @input="scopes.userFollowRead = $event"
+          sync
+      /></span>
     </b-list-group-item>
     <b-list-group-item>
       Read your private playlists
-      <span><ToggleButton v-model="scopes.playlistReadPrivate"/></span>
+      <span
+        ><ToggleButton
+          :value="scopes.playlistReadPrivate"
+          @input="scopes.playlistReadPrivate = $event"
+          sync
+      /></span>
     </b-list-group-item>
     <b-list-group-item>
       Read your collaborative playlists
-      <span><ToggleButton v-model="scopes.playlistReadCollaborative"/></span>
+      <span
+        ><ToggleButton
+          :value="scopes.playlistReadCollaborative"
+          @input="scopes.playlistReadCollaborative = $event"
+          sync
+      /></span>
     </b-list-group-item>
   </b-list-group>
 </template>
@@ -78,6 +104,9 @@ export default {
   computed: {
     authUrl: function() {
       let scopesArr = Object.keys(this.scopes).filter(x => this.scopes[x]);
+      scopesArr = scopesArr.map(x =>
+        x.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
+      );
       let params = {
         client_id: this.clientId,
         response_type: "token",
