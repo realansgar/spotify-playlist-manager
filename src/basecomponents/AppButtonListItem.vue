@@ -1,5 +1,5 @@
 <template>
-  <b-list-group-item>
+  <b-list-group-item :variant="variant">
     <b-container class="container">
       <b-row align-v="center" align-h="between" no-gutters>
         <b-col><slot /> </b-col>
@@ -15,7 +15,17 @@
 
 <script>
 export default {
-  name: "AppDoubleListItem"
+  name: "AppDoubleListItem",
+  props: {
+    danger: {
+      type: Boolean
+    }
+  },
+  computed: {
+    variant() {
+      return this.danger ? "danger" : "default";
+    }
+  }
 };
 </script>
 

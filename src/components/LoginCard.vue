@@ -6,15 +6,16 @@
       </b-card-title>
       <b-card-text>
         Authorize Playlist Manager to use several portions of your music data.
-        These will enrich the filters available.
+        Your data will only be used to give you better filters.
       </b-card-text>
-      <LoginPanel @update:authUrl="authUrl = $event" />
+      <LoginPanel
+        reason="accessTokenExpired"
+        @update:authUrl="authUrl = $event.toString()"
+      />
     </b-card-body>
     <b-card-footer>
       <span style="float: right">
-        <a :href="authUrl">
-          <b-button variant="primary">Login</b-button>
-        </a>
+        <b-button variant="primary" :href="authUrl">Login</b-button>
       </span>
     </b-card-footer>
   </b-card>

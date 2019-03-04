@@ -3,28 +3,35 @@
     {{ userDisplayName }} <br />
     <b-img :src="userImageUrl"></b-img> <br />
     <b-button @click="getMe">get Me</b-button>
+    <LoginModal ref="modal" :reason="modalReason"></LoginModal>
+    <b-button @click="$refs.modal.show()">Open Modal</b-button>
   </div>
 </template>
 
 <script>
 import SpotifyWebApi from "spotify-web-api-js";
+import LoginModal from "../components/LoginModal";
 
 let s = new SpotifyWebApi();
 
 export default {
   name: "AppPage",
-  data: function() {
-    return {
-      user: null
-    };
-  },
+  components: { LoginModal },
   props: {
     accessToken: {
       type: String,
       required: true
     }
   },
+  data: function() {
+    return {
+      user: null
+    };
+  },
   computed: {
+    modalReason() {
+      return "accessTokenExpired";
+    },
     userDisplayName() {
       return this.user ? this.user.display_name : "";
     },

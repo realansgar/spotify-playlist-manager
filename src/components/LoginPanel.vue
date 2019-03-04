@@ -1,67 +1,85 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <b-list-group>
+    <AppButtonListItem>
+      Read your public data (name, profile picture, public playlists)
+      <template v-slot:button>
+        <div
+          v-b-tooltip.hover
+          title="Playlist Manager gets these permissions automatically when you login."
+        >
+          <ToggleButton class="no-margin-bottom" :value="true" disabled />
+        </div>
+      </template>
+    </AppButtonListItem>
     <AppButtonListItem>
       Modify your public playlists
       <template v-slot:button>
         <div
           v-b-tooltip.hover
-          title="The app needs this permission to save your result playlist!"
+          title="Playlist Manager needs this permission to save your result playlist."
         >
-          <ToggleButton class="no-margin-bottom" :value="true" disabled="true" />
+          <ToggleButton class="no-margin-bottom" :value="true" disabled />
         </div>
       </template>
     </AppButtonListItem>
-    <AppButtonListItem>
+    <AppButtonListItem :danger="danger.userReadRecentlyPlayed">
       Read up to 50 of your recently played songs
       <template v-slot:button>
-        <ToggleButton class="no-margin-bottom"
+        <ToggleButton
+          class="no-margin-bottom"
           :value="scopes.userReadRecentlyPlayed"
           @input="scopes.userReadRecentlyPlayed = $event"
           sync
         />
       </template>
     </AppButtonListItem>
-    <AppButtonListItem>
+    <AppButtonListItem :danger="danger.userTopRead">
       Read your top artists and songs
       <template v-slot:button>
-        <ToggleButton class="no-margin-bottom"
+        <ToggleButton
+          class="no-margin-bottom"
           :value="scopes.userTopRead"
           @input="scopes.userTopRead = $event"
           sync
         />
       </template>
     </AppButtonListItem>
-    <AppButtonListItem>
+    <AppButtonListItem :danger="danger.userLibraryRead">
       Read your saved songs
       <template v-slot:button>
-        <ToggleButton class="no-margin-bottom"
+        <ToggleButton
+          class="no-margin-bottom"
           :value="scopes.userLibraryRead"
           @input="scopes.userLibraryRead = $event"
           sync
-      /></template>
+        />
+      </template>
     </AppButtonListItem>
-    <AppButtonListItem>
+    <AppButtonListItem :danger="danger.userFollowRead">
       Read your followed artists
       <template v-slot:button
-        ><ToggleButton class="no-margin-bottom"
+        ><ToggleButton
+          class="no-margin-bottom"
           :value="scopes.userFollowRead"
           @input="scopes.userFollowRead = $event"
           sync
       /></template>
     </AppButtonListItem>
-    <AppButtonListItem>
+    <AppButtonListItem :danger="danger.playlistReadPrivate">
       Read your private playlists
       <template v-slot:button
-        ><ToggleButton class="no-margin-bottom"
+        ><ToggleButton
+          class="no-margin-bottom"
           :value="scopes.playlistReadPrivate"
           @input="scopes.playlistReadPrivate = $event"
           sync
       /></template>
     </AppButtonListItem>
-    <AppButtonListItem>
+    <AppButtonListItem :reason="danger.playlistReadCollaborative">
       Read your collaborative playlists
       <template v-slot:button>
-        <ToggleButton class="no-margin-bottom"
+        <ToggleButton
+          class="no-margin-bottom"
           :value="scopes.playlistReadCollaborative"
           @input="scopes.playlistReadCollaborative = $event"
           sync
@@ -76,6 +94,21 @@ import AppButtonListItem from "../basecomponents/AppButtonListItem";
 export default {
   name: "LoginPanel",
   components: { AppButtonListItem },
+  props: {
+    reason: {
+      type: String,
+      validator: val =>
+        [
+          "accessTokenExpired",
+          "userReadRecentlyPlayed",
+          "userTopRead",
+          "userLibraryRead",
+          "userFollowRead",
+          "playlistReadPrivate",
+          "playlistReadCollaborative"
+        ].includes(val)
+    }
+  },
   data: function() {
     return {
       clientId: "bc334213f1d743b883dabe0d47e4422e",
@@ -111,7 +144,12 @@ export default {
     }
   },
   computed: {
-    authUrl: function() {
+    danger() {
+      let obj = Object.assign({}, this.scopes);
+      Object.keys(this.scopes).forEach(key => obj[key] = key === this.reason && !this.scopes[key]);
+      return obj;
+    },
+    authUrl() {
       let scopesArr = Object.keys(this.scopes).filter(x => this.scopes[x]);
       scopesArr = scopesArr.map(x =>
         x.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
@@ -123,9 +161,9 @@ export default {
         scope: scopesArr.join(" ")
       };
       let url = new URL(this.baseUrl);
-      for (let [key, value] of Object.entries(params)) {
-        url.searchParams.append(key, value);
-      }
+      Object.entries(params).forEach(([key, value]) =>
+        url.searchParams.append(key, value)
+      );
       return url;
     }
   }
