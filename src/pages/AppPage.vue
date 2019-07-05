@@ -1,7 +1,6 @@
 <template>
   <div>
     {{ userDisplayName }} <br />
-    {{ playlist }} <br />
     <b-img :src="userImageUrl"></b-img> <br />
     <b-button @click="getMe">get Me</b-button>
     <LoginModal ref="modal" :reason="modalReason"></LoginModal>
@@ -24,8 +23,7 @@ export default {
   },
   data: function() {
     return {
-      user: null,
-      playlist: null
+      user: null
     };
   },
   computed: {
@@ -37,9 +35,6 @@ export default {
     },
     userImageUrl() {
       return this.user ? this.user.images[0].url : "";
-    },
-    playlistTracks() {
-
     }
   },
   mounted() {
@@ -47,8 +42,8 @@ export default {
   },
   methods: {
     async getMe() {
-      const result = await s.getWholeMySavedTracks("74odZNgTsiJvVMJxwQw2GB");
-      console.log(result)
+      const result = await s.getWholePlaylistTracks("37i9dQZF1CApe6ywVthVP4");
+      console.log(result);
     },
     errorHandling(error) {
       console.log(error);

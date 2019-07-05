@@ -133,6 +133,7 @@ export default {
         console.error(e);
       }
     }
+    this.$emit("update:authUrl", this.authUrl);
   },
   watch: {
     scopes: {
