@@ -1,6 +1,7 @@
 <template>
   <div>
     {{ userDisplayName }} <br />
+    {{ playlist }} <br />
     <b-img :src="userImageUrl"></b-img> <br />
     <b-button @click="getMe">get Me</b-button>
     <LoginModal ref="modal" :reason="modalReason"></LoginModal>
@@ -9,10 +10,8 @@
 </template>
 
 <script>
-import SpotifyWebApi from "spotify-web-api-js";
+import s from "../api/spotifyapiwrapper";
 import LoginModal from "../components/LoginModal";
-
-let s = new SpotifyWebApi();
 
 export default {
   name: "AppPage",
@@ -25,7 +24,8 @@ export default {
   },
   data: function() {
     return {
-      user: null
+      user: null,
+      playlist: null
     };
   },
   computed: {
@@ -37,18 +37,18 @@ export default {
     },
     userImageUrl() {
       return this.user ? this.user.images[0].url : "";
+    },
+    playlistTracks() {
+
     }
   },
   mounted() {
     s.setAccessToken(this.accessToken);
   },
   methods: {
-    getMe() {
-      s.getMe()
-        .then(data => {
-          this.user = data;
-        })
-        .catch(error => this.errorHandling(error));
+    async getMe() {
+      const result = await s.getWholeMySavedTracks("74odZNgTsiJvVMJxwQw2GB");
+      console.log(result)
     },
     errorHandling(error) {
       console.log(error);
