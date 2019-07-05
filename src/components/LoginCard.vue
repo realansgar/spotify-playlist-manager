@@ -8,10 +8,7 @@
         Authorize Playlist Manager to use several portions of your music data.
         Your data will only be used to give you better filters.
       </b-card-text>
-      <LoginPanel
-        reason="accessTokenExpired"
-        @update:authUrl="authUrl = $event.toString()"
-      />
+      <LoginPanel reason="accessTokenExpired" />
     </b-card-body>
     <b-card-footer>
       <span style="float: right">
@@ -23,14 +20,13 @@
 
 <script>
 import LoginPanel from "./LoginPanel";
+import { mapGetters } from "vuex";
 
 export default {
   name: "LoginCard",
   components: { LoginPanel },
-  data() {
-    return {
-      authUrl: ""
-    };
+  computed: {
+    ...mapGetters({ authUrl: "auth/authUrl" })
   }
 };
 </script>

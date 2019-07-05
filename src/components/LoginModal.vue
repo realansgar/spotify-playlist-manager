@@ -9,17 +9,23 @@
     hide-header-close
   >
     <p>{{ text }} Don't worry, your current progress will be saved.</p>
-    <LoginPanel :reason="reason" @update:authUrl="authUrl = $event.toString()" />
+    <LoginPanel
+      :reason="reason"
+    />
     <template v-slot:modal-footer>
-      <b-button class="float-right" variant="secondary" @click="hide()">Cancel</b-button>
-      <b-button class="float-right" variant="primary" :href="authUrl">Login</b-button>
+      <b-button class="float-right" variant="secondary" @click="hide()"
+        >Cancel</b-button
+      >
+      <b-button class="float-right" variant="primary" :href="authUrl"
+        >Login</b-button
+      >
     </template>
   </b-modal>
 </template>
 
 <script>
 import LoginPanel from "./LoginPanel";
-
+import { mapGetters } from "vuex";
 export default {
   name: "LoginModal",
   components: { LoginPanel },
@@ -38,11 +44,6 @@ export default {
         ].includes(val)
     }
   },
-  data: function() {
-    return {
-      authUrl: ""
-    };
-  },
   computed: {
     title() {
       switch (this.reason) {
@@ -59,7 +60,8 @@ export default {
         default:
           return "Playlist Manager needs further authorization for this feature. Please login again.";
       }
-    }
+    },
+    ...mapGetters({ authUrl: "auth/authUrl" })
   },
   methods: {
     show() {

@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "AppDoubleListItem",
+  name: "AppButtonListItem",
   props: {
     danger: {
       type: Boolean

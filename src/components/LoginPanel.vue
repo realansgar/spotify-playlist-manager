@@ -28,7 +28,12 @@
         <ToggleButton
           class="no-margin-bottom"
           :value="scopes.userReadRecentlyPlayed"
-          @input="scopes.userReadRecentlyPlayed = $event"
+          @input="
+            updateScopes({
+              key: 'userReadRecentlyPlayed',
+              value: $event
+            })
+          "
           sync
         />
       </template>
@@ -39,7 +44,12 @@
         <ToggleButton
           class="no-margin-bottom"
           :value="scopes.userTopRead"
-          @input="scopes.userTopRead = $event"
+          @input="
+            updateScopes({
+              key: 'userTopRead',
+              value: $event
+            })
+          "
           sync
         />
       </template>
@@ -50,7 +60,12 @@
         <ToggleButton
           class="no-margin-bottom"
           :value="scopes.userLibraryRead"
-          @input="scopes.userLibraryRead = $event"
+          @input="
+            updateScopes({
+              key: 'userLibraryRead',
+              value: $event
+            })
+          "
           sync
         />
       </template>
@@ -61,7 +76,12 @@
         ><ToggleButton
           class="no-margin-bottom"
           :value="scopes.userFollowRead"
-          @input="scopes.userFollowRead = $event"
+          @input="
+            updateScopes({
+              key: 'userFollowRead',
+              value: $event
+            })
+          "
           sync
       /></template>
     </AppButtonListItem>
@@ -71,17 +91,27 @@
         ><ToggleButton
           class="no-margin-bottom"
           :value="scopes.playlistReadPrivate"
-          @input="scopes.playlistReadPrivate = $event"
+          @input="
+            updateScopes({
+              key: 'playlistReadPrivate',
+              value: $event
+            })
+          "
           sync
       /></template>
     </AppButtonListItem>
-    <AppButtonListItem :reason="danger.playlistReadCollaborative">
+    <AppButtonListItem :danger="danger.playlistReadCollaborative">
       Read your collaborative playlists
       <template v-slot:button>
         <ToggleButton
           class="no-margin-bottom"
           :value="scopes.playlistReadCollaborative"
-          @input="scopes.playlistReadCollaborative = $event"
+          @input="
+            updateScopes({
+              key: 'playlistReadCollaborative',
+              value: $event
+            })
+          "
           sync
         />
       </template>
@@ -91,6 +121,7 @@
 
 <script>
 import AppButtonListItem from "../basecomponents/AppButtonListItem";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "LoginPanel",
   components: { AppButtonListItem },
@@ -109,64 +140,20 @@ export default {
         ].includes(val)
     }
   },
-  data: function() {
-    return {
-      clientId: "bc334213f1d743b883dabe0d47e4422e",
-      baseUrl: "https://accounts.spotify.com/authorize",
-      redirectUrl: "http://localhost:8080/callback.html",
-      scopes: {
-        userReadRecentlyPlayed: false,
-        userTopRead: false,
-        userLibraryRead: false,
-        userFollowRead: false,
-        playlistReadPrivate: false,
-        playlistReadCollaborative: false,
-        playlistModifyPublic: true
-      }
-    };
-  },
-  mounted() {
-    if (localStorage.getItem("scopes")) {
-      try {
-        this.scopes = JSON.parse(localStorage.getItem("scopes"));
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    this.$emit("update:authUrl", this.authUrl);
-  },
-  watch: {
-    scopes: {
-      handler(newScopes) {
-        localStorage.setItem("scopes", JSON.stringify(newScopes));
-        this.$emit("update:authUrl", this.authUrl);
-      },
-      deep: true
-    }
-  },
   computed: {
     danger() {
-      let obj = Object.assign({}, this.scopes);
-      Object.keys(this.scopes).forEach(key => obj[key] = key === this.reason && !this.scopes[key]);
+      const obj = Object.assign({}, this.$store.state.auth.scopes);
+      Object.keys(this.$store.state.auth.scopes).forEach(
+        key => (obj[key] = key === this.reason && !this.$store.state.auth.scopes[key])
+      );
       return obj;
     },
-    authUrl() {
-      let scopesArr = Object.keys(this.scopes).filter(x => this.scopes[x]);
-      scopesArr = scopesArr.map(x =>
-        x.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()
-      );
-      let params = {
-        client_id: this.clientId,
-        response_type: "token",
-        redirect_uri: this.redirectUrl,
-        scope: scopesArr.join(" ")
-      };
-      let url = new URL(this.baseUrl);
-      Object.entries(params).forEach(([key, value]) =>
-        url.searchParams.append(key, value)
-      );
-      return url;
-    }
+    ...mapState("auth", {
+      scopes: "scopes"
+    })
+  },
+  methods: {
+    ...mapMutations({ updateScopes: "auth/updateScopes" })
   }
 };
 </script>
