@@ -12,6 +12,7 @@ Vue.use(ToggleButton);
 
 Vue.config.devtools = true;
 Vue.config.productionTip = false;
+Vue.config.ignoredElements = ["vaadin-combo-box"];
 
 new Vue({
   render: h => h(App),

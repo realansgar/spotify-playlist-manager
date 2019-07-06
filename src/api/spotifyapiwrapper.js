@@ -2,6 +2,7 @@ import SpotifyWebApi from "spotify-web-api-js";
 
 const GET_TRACKS_LIMIT = 50;
 const GET_PLAYLISTS_LIMIT = 50;
+const SEARCH_LIMIT = 10;
 
 const s = new SpotifyWebApi();
 
@@ -21,14 +22,31 @@ s.getWholePlaylistTracks = async function(playlistId, options) {
   return _getWholePagingUnwrapped(paging);
 };
 
-s.getWholeMySavedTracks = async function(options = { limit: GET_TRACKS_LIMIT }) {
+s.getWholeMySavedTracks = async function(
+  options = { limit: GET_TRACKS_LIMIT }
+) {
   const paging = await s.getMySavedTracks(options);
   return _getWholePagingUnwrapped(paging);
 };
 
-s.getWholeUserPlaylists = async function(userId, options = { limit: GET_PLAYLISTS_LIMIT }) {
+s.getWholeUserPlaylists = async function(
+  userId,
+  options = { limit: GET_PLAYLISTS_LIMIT }
+) {
   const paging = await s.getUserPlaylists(userId, options);
   return _getWholePagingUnwrapped(paging);
+};
+
+s.wholeSearch = async function(
+  query,
+  types = ["playlist", "artist", "album", "track"],
+  options = { limit: SEARCH_LIMIT }
+) {
+  const result = await s.search(query, types, options);
+  const typesArr = Object.keys(result);
+  const promises = typesArr.map(type => _getWholePagingUnwrapped(result[type]));
+  const nestedItems = await Promise.all(promises);
+  return typesArr.map((type, i) => ({ type, items: nestedItems[i] }));
 };
 
 export default s;

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <AppPage v-if="accessToken" :accessToken="accessToken" />
+    <AppPage v-if="accessToken" />
     <MainPage v-else />
   </div>
 </template>
@@ -8,6 +8,7 @@
 <script>
 import MainPage from "./pages/MainPage";
 import AppPage from "./pages/AppPage";
+import { mapState } from "vuex";
 
 export default {
   name: "app",
@@ -15,12 +16,16 @@ export default {
     AppPage,
     MainPage
   },
+  mounted() {
+    this.$store.commit("auth/setAccessToken");
+  },
   computed: {
-    accessToken() {
-      return document.cookie.replace(
-        /(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,
-        "$1"
-      );
+    ...mapState("auth", { accessToken: "accessToken" }),
+    ...mapState("songs", {s: "s"})
+  },
+  watch: {
+    accessToken(newValue) {
+      this.s.setAccessToken(newValue);
     }
   }
 };

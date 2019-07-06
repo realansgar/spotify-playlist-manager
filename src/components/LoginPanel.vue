@@ -144,7 +144,9 @@ export default {
     danger() {
       const obj = Object.assign({}, this.$store.state.auth.scopes);
       Object.keys(this.$store.state.auth.scopes).forEach(
-        key => (obj[key] = key === this.reason && !this.$store.state.auth.scopes[key])
+        key =>
+          (obj[key] =
+            key === this.reason && !this.$store.state.auth.scopes[key])
       );
       return obj;
     },

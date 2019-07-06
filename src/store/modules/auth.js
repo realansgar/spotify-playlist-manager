@@ -10,7 +10,8 @@ const state = {
   },
   clientId: "bc334213f1d743b883dabe0d47e4422e",
   baseUrl: "https://accounts.spotify.com/authorize",
-  redirectUrl: "http://localhost:8080/callback.html"
+  redirectUrl: "http://localhost:8080/callback.html",
+  accessToken: ""
 };
 
 const getters = {
@@ -34,8 +35,14 @@ const getters = {
 };
 
 const mutations = {
-  updateScopes: (state, payload) => {
+  updateScopes(state, payload) {
     state.scopes[payload.key] = payload.value;
+  },
+  setAccessToken(state) {
+    state.accessToken = document.cookie.replace(
+      /(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
   }
 };
 
