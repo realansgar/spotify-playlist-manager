@@ -16,7 +16,7 @@ const s = new SpotifyWebApi();
 async function _getWholePagingUnwrapped(paging, total = paging.total) {
   const result = [...paging.items];
   const requests = [];
-  const url = paging.href.substring(0, paging.href.indexOf("?"));
+  const url = paging.href.substring(0, paging.href.indexOf("?")); // TODO
   for (let i = result.length; i < total; i += paging.limit) {
     requests.push(s.getGeneric(`${url}?offset=${i}&limit=${paging.limit}`));
   }

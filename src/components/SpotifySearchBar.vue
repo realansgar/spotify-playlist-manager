@@ -6,7 +6,6 @@
     placeholder="Search Spotify!"
     :loading="loading"
     :internal-search="false"
-    :close-on-select="false"
     :preserve-search="true"
     :clear-on-select="false"
     v-model="selected"
@@ -17,18 +16,13 @@
     @search-change="search"
   >
     <template #singleLabel="{ option }">
-      <div class="option">
-        <!--<b-img class="option-image" :src="option.images[option.images.length - 1].url"></b-img>
-        <span> {{ option.name }} </span>
-        <span>{{ option.type }}</span>-->
+      <div class="option__desc">
+        <SpotifySearchBarOption :option="option" />
       </div>
     </template>
     <template #option="{ option }">
-      <div class="option">
-        {{option.type}}
-        <!--<b-img class="option-image" :src="option.images[option.images.length - 1].url"></b-img>
-        <span> {{ option.name }} </span>
-        <span>{{ option.type }}</span>-->
+      <div>
+        <SpotifySearchBarOption :option="option" />
       </div>
     </template>
   </MultiSelect>
@@ -37,9 +31,10 @@
 <script>
 import { mapState } from "vuex";
 import MultiSelect from "vue-multiselect";
+import SpotifySearchBarOption from "../basecomponents/SpotifySearchBarOption";
 export default {
   name: "SpotifySearchBar",
-  components: { MultiSelect },
+  components: { MultiSelect, SpotifySearchBarOption },
   data() {
     return {
       loading: false,
@@ -51,15 +46,24 @@ export default {
     ...mapState("songs", { s: "s" })
   },
   methods: {
+    getImage(option) {
+      if (option.type === "track") {
+        option = option.album;
+      }
+      return option.images[option.images.length - 1].url;
+    },
     async search(query) {
-      if (!query) return;
+      console.log(query);
+      if (!query) {
+        this.options = [];
+        return;
+    }
       this.loading = true;
       if (this._lastChanged) {
         clearTimeout(this._lastChanged);
       }
       this._lastChanged = setTimeout(async () => {
         const result = await this.s.wholeSearch(query);
-        console.log(result);
         this.options = result;
         this.loading = false;
       }, 400);
@@ -76,6 +80,5 @@ export default {
 }
 
 .searchbar {
-
 }
 </style>
