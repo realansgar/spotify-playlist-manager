@@ -4,7 +4,7 @@ const GET_TRACKS_LIMIT = 50;
 const GET_PLAYLISTS_LIMIT = 50;
 const SEARCH_LIMIT = 10;
 
-var typeNames = {
+const typeNames = {
   artists: "Artists",
   playlists: "Playlists",
   tracks: "Tracks",
@@ -16,9 +16,11 @@ const s = new SpotifyWebApi();
 async function _getWholePagingUnwrapped(paging, total = paging.total) {
   const result = [...paging.items];
   const requests = [];
-  const url = paging.href.substring(0, paging.href.indexOf("?")); // TODO
+  const url = new URL(paging.href);
+  url.searchParams.set("limit", paging.limit);
   for (let i = result.length; i < total; i += paging.limit) {
-    requests.push(s.getGeneric(`${url}?offset=${i}&limit=${paging.limit}`));
+    url.searchParams.set("offset", i.toString());
+    requests.push(s.getGeneric(url.href));
   }
   const pagings = await Promise.all(requests);
   return result.concat(pagings.flatMap(paging => paging.items));
@@ -55,7 +57,6 @@ s.wholeSearch = async function(
     _getWholePagingUnwrapped(result[type], SEARCH_LIMIT)
   );
   const nestedItems = await Promise.all(promises);
-  console.log(typesArr);
   return typesArr.map((type, i) => ({
     type: typeNames[type],
     items: nestedItems[i]

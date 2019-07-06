@@ -1,8 +1,9 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<!--suppress JSUnresolvedVariable, HtmlUnknownBooleanAttribute -->
+<template>
   <b-list-group>
     <AppButtonListItem>
       Read your public data (name, profile picture, public playlists)
-      <template v-slot:button>
+      <template #button>
         <div
           v-b-tooltip.hover
           title="Playlist Manager gets these permissions automatically when you login."
@@ -13,7 +14,7 @@
     </AppButtonListItem>
     <AppButtonListItem>
       Modify your public playlists
-      <template v-slot:button>
+      <template #button>
         <div
           v-b-tooltip.hover
           title="Playlist Manager needs this permission to save your result playlist."
@@ -24,7 +25,7 @@
     </AppButtonListItem>
     <AppButtonListItem :danger="danger.userReadRecentlyPlayed">
       Read up to 50 of your recently played songs
-      <template v-slot:button>
+      <template #button>
         <ToggleButton
           class="no-margin-bottom"
           :value="scopes.userReadRecentlyPlayed"
@@ -40,7 +41,7 @@
     </AppButtonListItem>
     <AppButtonListItem :danger="danger.userTopRead">
       Read your top artists and songs
-      <template v-slot:button>
+      <template #button>
         <ToggleButton
           class="no-margin-bottom"
           :value="scopes.userTopRead"
@@ -56,7 +57,7 @@
     </AppButtonListItem>
     <AppButtonListItem :danger="danger.userLibraryRead">
       Read your saved songs
-      <template v-slot:button>
+      <template #button>
         <ToggleButton
           class="no-margin-bottom"
           :value="scopes.userLibraryRead"
@@ -72,7 +73,7 @@
     </AppButtonListItem>
     <AppButtonListItem :danger="danger.userFollowRead">
       Read your followed artists
-      <template v-slot:button
+      <template #button
         ><ToggleButton
           class="no-margin-bottom"
           :value="scopes.userFollowRead"
@@ -87,7 +88,7 @@
     </AppButtonListItem>
     <AppButtonListItem :danger="danger.playlistReadPrivate">
       Read your private playlists
-      <template v-slot:button
+      <template #button
         ><ToggleButton
           class="no-margin-bottom"
           :value="scopes.playlistReadPrivate"
@@ -102,7 +103,7 @@
     </AppButtonListItem>
     <AppButtonListItem :danger="danger.playlistReadCollaborative">
       Read your collaborative playlists
-      <template v-slot:button>
+      <template #button>
         <ToggleButton
           class="no-margin-bottom"
           :value="scopes.playlistReadCollaborative"
@@ -166,6 +167,6 @@ span {
 }
 
 .no-margin-bottom {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 </style>

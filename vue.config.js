@@ -1,5 +1,6 @@
 module.exports = {
   chainWebpack: config => {
+    // noinspection JSIgnoredPromiseFromCall
     config.module
       .rule("vue")
       .use("vue-loader")

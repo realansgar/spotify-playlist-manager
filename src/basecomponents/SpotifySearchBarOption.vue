@@ -4,13 +4,11 @@
       <span class="option__title">{{ option.$groupLabel }}</span>
     </div>
   </div>
-  <div v-else>
-    <b-img
-      class="option__image"
-      :src="imageSrc"
-    ></b-img>
+  <div class="option" v-else>
+    <b-img-lazy class="option__image" :src="imageSrc"></b-img-lazy>
     <div class="option__desc">
       <span class="option__title">{{ option.name }}</span>
+      <br />
       <span class="option__small">{{ desc }}</span>
     </div>
   </div>
@@ -24,33 +22,77 @@ export default {
   },
   computed: {
     imageSrc() {
-      if (this.option.type === "track") {
-        return this.option.album.images[this.option.album.images.length - 1].url || "";
-      } else {
-        return this.option.images[this.option.images.length - 1].url || "";
+      try {
+        if (this.option.type === "track") {
+          return this.option.album.images[this.option.album.images.length - 1]
+            .url;
+        } else {
+          return this.option.images[this.option.images.length - 1].url;
+        }
+      } catch (e) {
+        return "";
       }
     },
     desc() {
       let desc = [];
-      if (this.option.type === "playlist") {
-        desc = [this.option.owner.display_name, this.option.tracks.total];
-      } else if (this.option.type === "artist") {
-        desc = [];
-      } else if (this.option.type === "album") {
-        desc = [...this.option.artists.map(x => x.name)];
-      } else if (this.option.type === "track") {
-        desc = [
-          this.option.album.name,
-          ...this.option.artists.map(x => x.name)
-        ];
+      switch (this.option.type) {
+        case "playlist":
+          desc = [
+            this.option.owner.display_name || undefined,
+            `${this.option.tracks.total} tracks`
+          ];
+          break;
+        case "artist":
+          desc = [];
+          break;
+        case "album":
+          desc = [...this.option.artists.map(x => x.name)];
+          break;
+        case "track":
+          desc = [
+            this.option.album.name,
+            ...this.option.artists.map(x => x.name)
+          ];
+          break;
       }
       desc = desc.filter(x => x !== undefined);
-      return ` •  ${desc.join(" • ")}`;
+      return desc.join(" • ");
     }
   }
 };
 </script>
 
+<!--suppress HtmlUnknownTarget -->
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
-<style scoped></style>
+<style scoped>
+.option {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.option__desc,
+.option__desc * {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.option__title {
+  font-size: 15px;
+}
+
+.option__small {
+  font-size: 12px;
+}
+
+.option__image {
+  height: 2.5em;
+  width: 2.5em;
+  margin-right: 12px;
+}
+</style>

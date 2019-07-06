@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     ...mapState("auth", { accessToken: "accessToken" }),
-    ...mapState("songs", {s: "s"})
+    ...mapState("songs", { s: "s" })
   },
   watch: {
     accessToken(newValue) {

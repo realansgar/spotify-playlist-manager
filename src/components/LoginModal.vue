@@ -9,10 +9,8 @@
     hide-header-close
   >
     <p>{{ text }} Don't worry, your current progress will be saved.</p>
-    <LoginPanel
-      :reason="reason"
-    />
-    <template v-slot:modal-footer>
+    <LoginPanel :reason="reason" />
+    <template #modal-footer>
       <b-button class="float-right" variant="secondary" @click="hide()"
         >Cancel</b-button
       >
