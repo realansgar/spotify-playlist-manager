@@ -7,10 +7,16 @@ import auth from "./modules/auth";
 
 Vue.use(Vuex);
 
-const vuexLocal = new VuexPersistence({
-  key: "spotifyPlaylistManager",
+const vuexLocalFilters = new VuexPersistence({
+  key: "spotifyPlaylistManagerFilters",
   storage: window.localStorage,
-  modules: ["filters", "auth"]
+  modules: ["filters"]
+});
+
+const vuexLocalScopes = new VuexPersistence({
+  key: "spotifyPlaylistManagerScopes",
+  storage: window.localStorage,
+  reducer: state => ({ scopes: state.auth.scopes })
 });
 
 const store = new Vuex.Store({
@@ -19,7 +25,7 @@ const store = new Vuex.Store({
     auth,
     songs
   },
-  plugins: [vuexLocal.plugin]
+  plugins: [vuexLocalFilters.plugin, vuexLocalScopes.plugin]
 });
 
 export default store;
