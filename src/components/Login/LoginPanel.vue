@@ -121,38 +121,22 @@
 </template>
 
 <script>
-import AppButtonListItem from "../basecomponents/AppButtonListItem";
+import AppButtonListItem from "../../basecomponents/AppButtonListItem";
 import { mapState, mapMutations } from "vuex";
 export default {
   name: "LoginPanel",
   components: { AppButtonListItem },
-  props: {
-    reason: {
-      type: String,
-      validator: val =>
-        [
-          "accessTokenExpired",
-          "userReadRecentlyPlayed",
-          "userTopRead",
-          "userLibraryRead",
-          "userFollowRead",
-          "playlistReadPrivate",
-          "playlistReadCollaborative"
-        ].includes(val)
-    }
-  },
   computed: {
     danger() {
-      const obj = Object.assign({}, this.$store.state.auth.scopes);
-      Object.keys(this.$store.state.auth.scopes).forEach(
-        key =>
-          (obj[key] =
-            key === this.reason && !this.$store.state.auth.scopes[key])
+      const obj = Object.assign({}, this.scopes);
+      Object.keys(this.scopes).forEach(
+        key => (obj[key] = key === this.reason && !this.scopes[key])
       );
       return obj;
     },
     ...mapState("auth", {
-      scopes: "scopes"
+      scopes: "scopes",
+      reason: "loginModalReason"
     })
   },
   methods: {

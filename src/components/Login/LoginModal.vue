@@ -2,7 +2,7 @@
   <b-modal
     ref="modal"
     @hide="handleHide"
-    :show="show"
+    v-model="show"
     :title="title"
     no-close-on-backdrop
     no-close-on-esc
@@ -23,25 +23,10 @@
 
 <script>
 import LoginPanel from "./LoginPanel";
-import { mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
   name: "LoginModal",
   components: { LoginPanel },
-  props: {
-    reason: {
-      type: String,
-      validator: val =>
-        [
-          "accessTokenExpired",
-          "userReadRecentlyPlayed",
-          "userTopRead",
-          "userLibraryRead",
-          "userFollowRead",
-          "playlistReadPrivate",
-          "playlistReadCollaborative"
-        ].includes(val)
-    }
-  },
   computed: {
     title() {
       switch (this.reason) {
@@ -59,18 +44,16 @@ export default {
           return "Playlist Manager needs further authorization for this feature. Please login again.";
       }
     },
+    ...mapState("auth", { show: "loginModalShow", reason: "loginModalReason" }),
     ...mapGetters({ authUrl: "auth/authUrl" })
   },
   methods: {
-    show() {
-      this.$refs.modal.show();
-    },
     hide() {
-      this.$refs.modal.hide();
+      this.$store.commit("auth/updateLoginModal", { show: false });
     },
     handleHide() {
       if (this.reason === "accessTokenExpired") {
-        window.location.replace("./");
+        this.$store.commit("auth/setAccessToken", { token: "" });
       }
     }
   }

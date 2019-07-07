@@ -17,6 +17,7 @@
       </template>
     </MultiSelect>
     <MultiSelect
+      class="search-select"
       :show-labels="false"
       :placeholder="searchPlaceholder"
       :loading="loading"
@@ -60,19 +61,19 @@ export default {
       options: [],
       typeOptions: [
         {
-          label: "Playlist",
+          label: "Playlists",
           value: "playlist"
         },
         {
-          label: "Artist",
+          label: "Artists",
           value: "artist"
         },
         {
-          label: "Album",
+          label: "Albums",
           value: "album"
         },
         {
-          label: "Track",
+          label: "Tracks",
           value: "track"
         }
       ],
@@ -104,9 +105,18 @@ export default {
         clearTimeout(this._lastChanged);
       }
       this._lastChanged = setTimeout(async () => {
-        const result = await this.s.wholeSearch(query, this.selectedTypesValue);
-        this.options = result.filter(x => x.items[0] !== undefined);
-        this.loading = false;
+        try {
+          const result = await this.s.wholeSearch(query, this.selectedTypesValue);
+          this.options = result.filter(x => x.items[0] !== undefined);
+        } catch (e) {
+          if (e.status === 401) {
+            this.$store.commit("auth/updateLoginModal", { show: true, reason: "accessTokenExpired" });
+          } else {
+            throw e;
+          }
+        } finally {
+          this.loading = false;
+        }
       }, 400);
     }
   }
@@ -118,11 +128,12 @@ export default {
 
 <!--suppress CssUnusedSymbol -->
 <style>
-.multiselect__content {
-  max-width: 100%;
+.multiselect {
+  min-height: 43px;
 }
 
-.multiselect__tags {
+.multiselect__content {
+  max-width: 100%;
 }
 </style>
 

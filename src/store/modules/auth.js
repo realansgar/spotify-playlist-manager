@@ -11,7 +11,9 @@ const state = {
   clientId: "bc334213f1d743b883dabe0d47e4422e",
   baseUrl: "https://accounts.spotify.com/authorize",
   redirectUrl: "http://localhost:8080/callback.html",
-  accessToken: ""
+  accessToken: "",
+  loginModalShow: false,
+  loginModalReason: ""
 };
 
 const getters = {
@@ -35,14 +37,22 @@ const getters = {
 };
 
 const mutations = {
-  updateScopes(state, payload) {
-    state.scopes[payload.key] = payload.value;
+  updateLoginModal(state, { show, reason } = {}) {
+    state.loginModalShow = show;
+    state.loginModalReason = reason || state.loginModalReason;
   },
-  setAccessToken(state) {
-    state.accessToken = document.cookie.replace(
-      /(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,
-      "$1"
-    );
+  updateScopes(state, { key, value }) {
+    state.scopes[key] = value;
+  },
+  setAccessToken(state, { token } = {}) {
+    if (token !== undefined) {
+      state.accessToken = token;
+    } else {
+      state.accessToken = document.cookie.replace(
+        /(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,
+        "$1"
+      );
+    }
   }
 };
 
