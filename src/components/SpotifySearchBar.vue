@@ -6,6 +6,7 @@
       :multiple="true"
       :searchable="false"
       :close-on-select="false"
+      :allow-empty="false"
       placeholder="Result types"
       v-model="selectedTypes"
       :options="typeOptions"
@@ -13,7 +14,7 @@
       track-by="value"
     >
       <template #selection>
-        {{ selectedTypesLabel }}
+        <span>{{ selectedTypesLabel }}</span>
       </template>
     </MultiSelect>
     <MultiSelect
@@ -41,6 +42,12 @@
           <SpotifySearchBarOption :option="option" />
         </div>
       </template>
+      <template #noResult>
+        <span>No results</span>
+      </template>
+      <template #noOptions>
+        <div></div>
+      </template>
     </MultiSelect>
   </div>
 </template>
@@ -53,6 +60,9 @@ import SpotifySearchBarOption from "../basecomponents/SpotifySearchBarOption";
 export default {
   name: "SpotifySearchBar",
   components: { MultiSelect, SpotifySearchBarOption },
+  mounted() {
+    this.selectedTypes = JSON.parse(JSON.stringify(this.typeOptions));
+  },
   data() {
     return {
       loading: false,
@@ -106,11 +116,19 @@ export default {
       }
       this._lastChanged = setTimeout(async () => {
         try {
-          const result = await this.s.wholeSearch(query, this.selectedTypesValue);
-          this.options = result.filter(x => x.items[0] !== undefined);
+          const result = await this.s.wholeSearch(
+            query,
+            this.selectedTypesValue
+          );
+          if (this.searchQuery) {
+            this.options = result.filter(x => x.items[0] !== undefined);
+          }
         } catch (e) {
           if (e.status === 401) {
-            this.$store.commit("auth/updateLoginModal", { show: true, reason: "accessTokenExpired" });
+            this.$store.commit("auth/updateLoginModal", {
+              show: true,
+              reason: "accessTokenExpired"
+            });
           } else {
             throw e;
           }
@@ -128,10 +146,6 @@ export default {
 
 <!--suppress CssUnusedSymbol -->
 <style>
-.multiselect {
-  min-height: 43px;
-}
-
 .multiselect__content {
   max-width: 100%;
 }
@@ -139,7 +153,7 @@ export default {
 
 <style scoped>
 .type-select {
-  width: 22rem;
+  max-width: 16rem;
 }
 
 @media not all and (max-width: 768px) {
