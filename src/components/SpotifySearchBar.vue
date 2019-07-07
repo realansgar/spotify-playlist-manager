@@ -25,7 +25,7 @@
       :internal-search="false"
       :preserve-search="true"
       :clear-on-select="false"
-      v-model="selected"
+      v-model="value"
       :options="options"
       :options-limit="40"
       group-label="type"
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       loading: false,
-      selected: null,
+      value: null,
       selectedTypes: [],
       options: [],
       typeOptions: [
