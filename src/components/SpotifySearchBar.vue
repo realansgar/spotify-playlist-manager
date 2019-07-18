@@ -12,6 +12,7 @@
       :options="typeOptions"
       label="label"
       track-by="value"
+      :disabled="types.length > 0"
     >
       <template #selection>
         <span>{{ selectedTypesLabel }}</span>
@@ -60,6 +61,16 @@ import SpotifySearchBarOption from "../basecomponents/SpotifySearchBarOption";
 export default {
   name: "SpotifySearchBar",
   components: { MultiSelect, SpotifySearchBarOption },
+  props: {
+    label: {
+      type: String,
+      default: "Search Spotify!"
+    },
+    types: {
+      type: Array,
+      default: () => []
+    }
+  },
   mounted() {
     this.selectedTypes = JSON.parse(JSON.stringify(this.typeOptions));
   },
@@ -87,7 +98,7 @@ export default {
           value: "album"
         },
         {
-          label: "Tracks",
+          label: "Songs",
           value: "track"
         }
       ],
@@ -96,7 +107,7 @@ export default {
   },
   computed: {
     searchPlaceholder() {
-      return this.searchQuery || "Search Spotify!";
+      return this.searchQuery || this.label;
     },
     selectedTypesLabel() {
       return this.selectedTypes.map(x => x.label).join(", ");
@@ -108,8 +119,17 @@ export default {
     ...mapState("songs", { s: "s" })
   },
   watch: {
+    value(newVal) {
+      this.$emit("input", newVal);
+    },
     selectedTypes() {
       this.search(this.searchQuery);
+    },
+    types(newVal) {
+      this.selectedTypes =
+        newVal.length > 0
+          ? newVal
+          : JSON.parse(JSON.stringify(this.typeOptions));
     }
   },
   methods: {
