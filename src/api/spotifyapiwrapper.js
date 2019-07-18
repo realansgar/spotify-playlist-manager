@@ -8,7 +8,8 @@ const typeNames = {
   artists: "Artists",
   playlists: "Playlists",
   tracks: "Tracks",
-  albums: "Albums"
+  albums: "Albums",
+  user_playlist: "My Playlists"
 };
 
 const s = new SpotifyWebApi();
@@ -51,16 +52,35 @@ s.wholeSearch = async function(
   types = ["playlist", "artist", "album", "track"],
   options = { limit: SEARCH_LIMIT }
 ) {
-  const result = await s.search(query, types, options);
-  const typesArr = Object.keys(result);
-  const promises = typesArr.map(type =>
-    _getWholePagingUnwrapped(result[type], SEARCH_LIMIT)
-  );
-  const nestedItems = await Promise.all(promises);
-  return typesArr.map((type, i) => ({
-    type: typeNames[type],
-    items: nestedItems[i]
-  }));
+  const searchableTypes = types.filter(x => x !== "user_playlist");
+  let returnVal = [];
+  if (searchableTypes.length > 0) {
+    const result = await s.search(query, searchableTypes, options);
+    const typesArr = Object.keys(result);
+    const promises = typesArr.map(type =>
+      _getWholePagingUnwrapped(result[type], SEARCH_LIMIT)
+    );
+    const nestedItems = await Promise.all(promises);
+    returnVal = typesArr.map((type, i) => ({
+      type: typeNames[type],
+      items: nestedItems[i]
+    }));
+  }
+  if (types.includes("user_playlist")) {
+    let userPlaylists = await s.getWholeUserPlaylists();
+    userPlaylists = userPlaylists.filter(
+      x =>
+        x.name.toLowerCase().includes(query.toLowerCase()) ||
+        (x.owner &&
+          x.owner.display_name &&
+          x.owner.display_name.toLowerCase().includes(query.toLowerCase()))
+    );
+    returnVal.unshift({
+      type: typeNames["user_playlist"],
+      items: userPlaylists
+    });
+  }
+  return returnVal;
 };
 
 export default s;

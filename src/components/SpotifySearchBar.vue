@@ -71,6 +71,10 @@ export default {
       options: [],
       typeOptions: [
         {
+          label: "My Playlists",
+          value: "user_playlist"
+        },
+        {
           label: "Playlists",
           value: "playlist"
         },
@@ -102,6 +106,11 @@ export default {
       return this.selectedTypes.map(x => x.value);
     },
     ...mapState("songs", { s: "s" })
+  },
+  watch: {
+    selectedTypes() {
+      this.search(this.searchQuery);
+    }
   },
   methods: {
     async search(query) {

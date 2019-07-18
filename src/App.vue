@@ -1,11 +1,12 @@
 <template>
   <div id="app">
-    <AppPage v-if="accessToken" />
+    <PlaylistFilterPage v-if="accessToken" />
     <MainPage v-else />
   </div>
 </template>
 
 <script>
+import PlaylistFilterPage from "./pages/PlaylistFilterPage";
 import MainPage from "./pages/MainPage";
 import AppPage from "./pages/AppPage";
 import { mapState } from "vuex";
@@ -14,7 +15,8 @@ export default {
   name: "app",
   components: {
     AppPage,
-    MainPage
+    MainPage,
+    PlaylistFilterPage
   },
   mounted() {
     this.$store.commit("auth/setAccessToken");
