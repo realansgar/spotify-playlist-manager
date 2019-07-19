@@ -1,15 +1,15 @@
 const availableSources = [
   {
-    value: "library",
+    id: "library",
     label: "Liked Songs",
     inputs: []
   },
   {
-    value: "recent_tracks",
+    id: "recent_tracks",
     label: "Recently Played Songs",
     inputs: [
       {
-        value: "limit",
+        id: "limit_recent",
         type: "number",
         label: "Amount",
         min: 0,
@@ -19,54 +19,54 @@ const availableSources = [
     ]
   },
   {
-    value: "top",
+    id: "top",
     label: "Top Songs or Artists",
     inputs: [
       {
-        value: "type",
+        id: "type",
         type: "select",
         label: "",
         options: [
           {
             label: "Songs",
-            value: "tracks"
+            id: "tracks"
           },
           {
             label: "Artists",
-            value: "artists"
+            id: "artists"
           }
         ],
         required: true
       },
       {
-        value: "time_range",
+        id: "time_range",
         type: "select",
         label: "time range",
         options: [
-          { label: "Short Term", value: "short_term" },
-          { label: "Medium Term", value: "medium_term" },
-          { label: "Long Term", value: "long_term" }
+          { label: "Short Term", id: "short_term" },
+          { label: "Medium Term", id: "medium_term" },
+          { label: "Long Term", id: "long_term" }
         ],
         required: true
       },
-      { value: "limit", type: "number", label: "Amount", min: 0, max: 50 }
+      { id: "limit_top", type: "number", label: "Amount", min: 0, max: 50 }
     ]
   },
   {
-    value: "search",
+    id: "search",
     label: "Search Spotify!",
-    inputs: [{ value: "item", type: "search", label: "Search Spotify!" }]
+    inputs: [{ id: "item", type: "search", label: "Search Spotify!" }]
   }
 ];
 
 const availableFilters = [
   {
-    value: "in",
+    id: "in",
     label: "Song is in",
-    inputs: [{ value: "item", type: "source" }]
+    inputs: [{ id: "item", type: "source" }]
   },
   {
-    value: "duration_ms",
+    id: "duration_ms",
     label: ""
   }
 ];
@@ -74,7 +74,7 @@ const availableFilters = [
 const state = {
   availableSources,
   availableFilters,
-  groups: []
+  
 };
 
 const getters = {};

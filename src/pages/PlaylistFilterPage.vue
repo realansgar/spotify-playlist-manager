@@ -5,7 +5,7 @@
         title="1. Track sources"
         sub-title="Select track sources that should be filtered."
       >
-        <SpotifySearchBar v-for=""/>
+        <SourceItem />
       </b-card>
       <b-card
         title="2. Filters"
@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import SpotifySearchBar from "../components/SpotifySearchBar";
+import SourceItem from "../components/SourceItem";
 import { mapState } from "vuex";
 export default {
   name: "PlaylistFilterPage",
-  components: { SpotifySearchBar },
+  components: { SourceItem},
   computed: {
     ...mapState("filters", {})
   }

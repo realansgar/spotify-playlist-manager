@@ -26,7 +26,8 @@
       :internal-search="false"
       :preserve-search="true"
       :clear-on-select="false"
-      v-model="value"
+      :value="value"
+      @input="$emit('input', $event.target.value)"
       :options="options"
       :options-limit="40"
       group-label="type"
@@ -62,6 +63,10 @@ export default {
   name: "SpotifySearchBar",
   components: { MultiSelect, SpotifySearchBarOption },
   props: {
+    value: {
+      type: Object,
+      default: null
+    },
     label: {
       type: String,
       default: "Search Spotify!"
@@ -77,7 +82,6 @@ export default {
   data() {
     return {
       loading: false,
-      value: null,
       selectedTypes: [],
       options: [],
       typeOptions: [

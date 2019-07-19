@@ -4,44 +4,84 @@
       :show-labels="false"
       :searchable="false"
       :allow-empty="false"
-      placeholder=""
-      v-model="selectedSource"
+      placeholder="Source Types"
+      v-model="localValue.source"
       :options="availableSources"
       label="label"
     />
-    <div v-for="input in selectedSource.inputs" :key="input.value">
+    <div v-for="input in localValue.source.inputs" :key="input.id">
       <b-input
         v-if="input.type === 'number'"
         type="number"
+        v-model="localValue[input.id]"
+        :placeholder="input.label"
+        :required="input.required"
         :min="input.min"
         :max="input.max"
       ></b-input>
       <MultiSelect
+        v-else-if="input.type === 'select'"
         :show-labels="false"
         :searchable="false"
-        :
+        :allow-empty="!input.required"
+        :placeholder="input.label"
+        :preselect-first="true"
+        v-model="localValue[input.id]"
+        :options="input.options"
+        label="label"
+      />
+      <SpotifySearchBar
+        v-else-if="input.type === 'search'"
+        v-model="localValue[input.id]"
       />
     </div>
-    <b-button variant="danger" :disabled="deleteDisabled">Delete</b-button>
+    <b-button
+      variant="danger"
+      :disabled="deleteDisabled"
+      @click="$emit('delete', index)"
+    >
+      Delete
+    </b-button>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import MultiSelect from "vue-multiselect";
+import SpotifySearchBar from "./SpotifySearchBar";
 
 export default {
   name: "SourceItem",
-  components: { MultiSelect },
+  components: { MultiSelect, SpotifySearchBar },
+  props: {
+    index: Number,
+    value: Object,
+    deleteDisabled: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
-      value: null,
-      selectedSource: this.availableSources[0]
+      localValue: { source: { inputs: [] } }
     };
   },
   computed: {
-    deleteDisabled() {},
     ...mapState("filters", { availableSources: "availableSources" })
+  },
+  watch: {
+    value: {
+      deep: true,
+      handler(newValue) {
+        this.localValue = newValue;
+      }
+    },
+    localValue: {
+      deep: true,
+      handler(newValue) {
+        this.$emit("input", newValue);
+      }
+    }
   }
 };
 </script>
