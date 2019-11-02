@@ -9,7 +9,7 @@
       :options="availableSources"
       label="label"
     />
-    <div v-for="input in localValue.source.inputs" :key="input.id">
+    <div v-for="input in (localValue.source ? localValue.source.inputs : [])" :key="input.id">
       <b-input
         v-if="input.type === 'number'"
         type="number"

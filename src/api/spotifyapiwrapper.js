@@ -14,7 +14,9 @@ const typeNames = {
 
 const s = new SpotifyWebApi();
 
-async function _getWholePagingUnwrapped(paging, total = paging.total) {
+async function _getWholePagingUnwrapped(paging, max) {
+  let total = paging.total;
+  if (max !== undefined) total = Math.min(paging.total, max);
   const result = [...paging.items];
   const requests = [];
   const url = new URL(paging.href);

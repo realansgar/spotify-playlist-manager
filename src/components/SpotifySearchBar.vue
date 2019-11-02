@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="searchbar-container">
     <MultiSelect
       class="type-select"
       :show-labels="false"
@@ -27,7 +27,7 @@
       :preserve-search="true"
       :clear-on-select="false"
       :value="value"
-      @input="$emit('input', $event.target.value)"
+      @input="$emit('input', $event)"
       :options="options"
       :options-limit="40"
       group-label="type"
@@ -196,7 +196,7 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .container {
+  .searchbar-container {
     flex-wrap: wrap;
   }
   .type-select {
@@ -204,7 +204,7 @@ export default {
   }
 }
 
-.container {
+.searchbar-container {
   display: flex;
   align-items: center;
 }
