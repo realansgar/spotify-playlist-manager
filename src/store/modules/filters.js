@@ -74,12 +74,39 @@ const availableFilters = [
 const state = {
   availableSources,
   availableFilters,
-  
+  sources: [{ _id: Date.now() }],
+  filters: [{ _id: Date.now() }]
 };
 
-const getters = {};
+const getters = {
+  getArrayIndex: state => (array, object) =>
+    state[array].findIndex(x => x._id === object._id)
+};
 
-const mutations = {};
+const mutations = {
+  addEmptySource(state) {
+    state.sources.push({ _id: Date.now() });
+  },
+  addEmptyFilter(state) {
+    state.filters.push({ _id: Date.now() });
+  },
+  saveSource(state, { source }) {
+    const index = state.sources.findIndex(x => x._id === source._id);
+    state.sources.splice(index, 1, source);
+  },
+  saveFilter(state, { filter }) {
+    const index = state.filters.findIndex(x => x._id === filter._id);
+    state.filters.splice(index, 1, filter);
+  },
+  deleteSource(state, { source }) {
+    const index = state.sources.findIndex(x => x._id === source._id);
+    state.sources.splice(index, 1);
+  },
+  deleteFilter(state, { filter }) {
+    const index = state.filters.findIndex(x => x._id === filter._id);
+    state.filters.splice(index, 1);
+  }
+};
 
 const actions = {};
 

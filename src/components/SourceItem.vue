@@ -38,7 +38,7 @@
     <b-button
       variant="danger"
       :disabled="deleteDisabled"
-      @click="$emit('delete', index)"
+      @click="$emit('delete', localValue)"
     >
       Delete
     </b-button>
@@ -54,7 +54,6 @@ export default {
   name: "SourceItem",
   components: { MultiSelect, SpotifySearchBar },
   props: {
-    index: Number,
     value: Object,
     deleteDisabled: {
       type: Boolean,
@@ -63,7 +62,7 @@ export default {
   },
   data() {
     return {
-      localValue: { source: { inputs: [] } }
+      localValue: this.value
     };
   },
   computed: {
@@ -79,7 +78,7 @@ export default {
     localValue: {
       deep: true,
       handler(newValue) {
-        this.$emit("input", newValue);
+        this.$emit("value-changed", newValue);
       }
     }
   }
