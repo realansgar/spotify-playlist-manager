@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <LoginModal />
     <PlaylistFilterPage v-if="accessToken" />
     <MainPage v-else />
   </div>
@@ -8,13 +9,13 @@
 <script>
 import PlaylistFilterPage from "./pages/PlaylistFilterPage";
 import MainPage from "./pages/MainPage";
-import AppPage from "./pages/AppPage";
+import LoginModal from "./components/Login/LoginModal";
 import { mapState } from "vuex";
 
 export default {
   name: "app",
   components: {
-    AppPage,
+    LoginModal,
     MainPage,
     PlaylistFilterPage
   },

@@ -2,7 +2,7 @@
   <b-modal
     ref="modal"
     @hide="handleHide"
-    v-model="show"
+    :visible="show"
     :title="title"
     no-close-on-backdrop
     no-close-on-esc
