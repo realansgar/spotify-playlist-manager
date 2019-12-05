@@ -33,7 +33,7 @@
         :max="input.max"
       />
       <SourceItem
-        v-if="input.type === 'source'"
+        v-else-if="input.type === 'source'"
         :value="localValue[input.id]"
         hide-disabled
       />
