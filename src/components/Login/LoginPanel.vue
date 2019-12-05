@@ -8,7 +8,7 @@
           v-b-tooltip.hover
           title="Playlist Manager gets these permissions automatically when you login."
         >
-          <ToggleButton class="no-margin-bottom" :value="true" disabled />
+          <ToggleButton class="no-margin-bottom" value disabled />
         </div>
       </template>
     </AppButtonListItem>
@@ -19,7 +19,7 @@
           v-b-tooltip.hover
           title="Playlist Manager needs this permission to save your result playlist."
         >
-          <ToggleButton class="no-margin-bottom" :value="true" disabled />
+          <ToggleButton class="no-margin-bottom" value disabled />
         </div>
       </template>
     </AppButtonListItem>

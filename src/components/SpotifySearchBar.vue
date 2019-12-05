@@ -3,7 +3,7 @@
     <MultiSelect
       class="type-select"
       :show-labels="false"
-      :multiple="true"
+      multiple
       :searchable="false"
       :close-on-select="false"
       :allow-empty="false"
@@ -24,7 +24,7 @@
       :placeholder="searchPlaceholder"
       :loading="loading"
       :internal-search="false"
-      :preserve-search="true"
+      preserve-search
       :clear-on-select="false"
       :value="value"
       @input="$emit('input', $event)"

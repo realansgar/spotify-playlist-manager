@@ -25,7 +25,7 @@
         :searchable="false"
         :allow-empty="!input.required"
         :placeholder="input.label"
-        :preselect-first="true"
+        preselect-first
         v-model="localValue[input.id]"
         :options="input.options"
         label="label"
