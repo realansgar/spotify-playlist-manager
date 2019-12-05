@@ -63,11 +63,40 @@ const availableFilters = [
   {
     id: "in",
     label: "Song is in",
-    inputs: [{ id: "item", type: "source" }]
+    inputs: [{ id: "source", type: "source" }]
+  },
+  {
+    id: "name_match",
+    label: "Song name matches",
+    inputs: [{ id: "match_string", label: "substring or regex", type: "text" }]
   },
   {
     id: "duration_ms",
-    label: ""
+    label: "Song length",
+    inputs: [
+      { id: "min", label: "minimum length", type: "number", min: 0 },
+      { id: "max", label: "maximum length", type: "number", min: 0 }
+    ]
+  },
+  {
+    id: "popularity",
+    label: "Song popularity",
+    inputs: [
+      {
+        id: "min",
+        label: "minimum popularity",
+        type: "number",
+        min: 0,
+        max: 100
+      },
+      {
+        id: "max",
+        label: "maximum popularity",
+        type: "number",
+        min: 0,
+        max: 100
+      }
+    ]
   }
 ];
 
@@ -75,7 +104,7 @@ const state = {
   availableSources,
   availableFilters,
   sources: [{ _id: Date.now() }],
-  filters: [{ _id: Date.now() }]
+  filters: [{ _id: Date.now(), source: {} }]
 };
 
 const getters = {
@@ -88,7 +117,7 @@ const mutations = {
     state.sources.push({ _id: Date.now() });
   },
   addEmptyFilter(state) {
-    state.filters.push({ _id: Date.now() });
+    state.filters.push({ _id: Date.now(), source: {} });
   },
   saveSource(state, { source }) {
     const index = state.sources.findIndex(x => x._id === source._id);

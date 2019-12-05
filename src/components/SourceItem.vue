@@ -1,6 +1,7 @@
 <template>
   <div>
     <MultiSelect
+      class="mb-2"
       :show-labels="false"
       :searchable="false"
       :allow-empty="false"
@@ -9,16 +10,21 @@
       :options="availableSources"
       label="label"
     />
-    <div v-for="input in (localValue.source ? localValue.source.inputs : [])" :key="input.id">
+    <div
+      class="mb-2"
+      v-for="input in localValue.source ? localValue.source.inputs : []"
+      :key="input.id"
+    >
       <b-input
-        v-if="input.type === 'number'"
-        type="number"
+        v-if="input.type === 'number' || input.type === 'text'"
+        :type="input.type"
         v-model="localValue[input.id]"
         :placeholder="input.label"
         :required="input.required"
+        :number="input.type === 'number'"
         :min="input.min"
         :max="input.max"
-      ></b-input>
+      />
       <MultiSelect
         v-else-if="input.type === 'select'"
         :show-labels="false"
@@ -36,6 +42,7 @@
       />
     </div>
     <b-button
+      v-if="!hideDisabled"
       variant="danger"
       :disabled="deleteDisabled"
       @click="$emit('delete', localValue)"
@@ -56,6 +63,10 @@ export default {
   props: {
     value: Object,
     deleteDisabled: {
+      type: Boolean,
+      default: false
+    },
+    hideDisabled: {
       type: Boolean,
       default: false
     }
