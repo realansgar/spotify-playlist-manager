@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "SpotifySearchBarOption",
+  name: "SpotifyObject",
   props: {
     option: Object
   },
@@ -62,9 +62,6 @@ export default {
 };
 </script>
 
-<!--suppress HtmlUnknownTarget -->
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-
 <style scoped>
 .option {
   display: flex;
@@ -91,8 +88,9 @@ export default {
 }
 
 .option__image {
-  height: 2.5em;
-  width: 2.5em;
+  flex-shrink: 0;
+  height: 2.5rem;
+  width: 2.5rem;
   margin-right: 12px;
 }
 </style>

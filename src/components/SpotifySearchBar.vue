@@ -36,12 +36,12 @@
     >
       <template #singleLabel="{ option }">
         <div class="option__desc">
-          <SpotifySearchBarOption :option="option" />
+          <SpotifyObject :option="option" />
         </div>
       </template>
       <template #option="{ option }">
         <div>
-          <SpotifySearchBarOption :option="option" />
+          <SpotifyObject :option="option" />
         </div>
       </template>
       <template #noResult>
@@ -57,11 +57,11 @@
 <script>
 import { mapState } from "vuex";
 import MultiSelect from "vue-multiselect";
-import SpotifySearchBarOption from "../basecomponents/SpotifySearchBarOption";
+import SpotifyObject from "../basecomponents/SpotifyObject";
 
 export default {
   name: "SpotifySearchBar",
-  components: { MultiSelect, SpotifySearchBarOption },
+  components: { MultiSelect, SpotifyObject },
   props: {
     value: {
       type: Object,
