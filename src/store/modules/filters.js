@@ -49,7 +49,8 @@ const availableSources = [
         ],
         required: true
       },
-      { id: "limit_top", type: "number", label: "Amount", min: 0, max: 50 }
+      { id: "limit_top", type: "number", label: "Amount", min: 0, max: 50 },
+      { id: "artistTop", type: "artistTop" }
     ]
   },
   {

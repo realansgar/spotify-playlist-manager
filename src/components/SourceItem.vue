@@ -39,7 +39,21 @@
       <SpotifySearchBar
         v-else-if="input.type === 'search'"
         v-model="localValue[input.id]"
+        @artist-top="localValue"
       />
+      <b-form-checkbox
+        class="artist-top-toggle"
+        v-if="
+          input.type === 'artistTop' &&
+            localValue.type &&
+            localValue.type.id === 'artists'
+        "
+        @input="$set(localValue, 'artistTop', $event)"
+        button
+        button-variant="outline-primary"
+      >
+        {{ localValue.artistTop ? "Top Songs" : "All Songs" }}
+      </b-form-checkbox>
     </div>
     <b-button
       v-if="!hideDisabled"

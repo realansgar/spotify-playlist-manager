@@ -26,8 +26,7 @@
       :internal-search="false"
       preserve-search
       :clear-on-select="false"
-      :value="value"
-      @input="$emit('input', $event)"
+      v-model="localValue"
       :options="options"
       :options-limit="40"
       group-label="type"
@@ -51,6 +50,15 @@
         <div></div>
       </template>
     </MultiSelect>
+    <b-form-checkbox
+      class="artist-top-toggle"
+      v-if="localValue && localValue.type === 'artist'"
+      @input="$set(localValue, 'artistTop', $event)"
+      button
+      button-variant="outline-primary"
+    >
+      {{ localValue && localValue.artistTop ? "Top Songs" : "All Songs" }}
+    </b-form-checkbox>
   </div>
 </template>
 
@@ -81,6 +89,7 @@ export default {
   },
   data() {
     return {
+      localValue: this.value,
       loading: false,
       selectedTypes: [],
       options: [],
@@ -123,8 +132,17 @@ export default {
     ...mapState("songs", { s: "s" })
   },
   watch: {
-    value(newVal) {
-      this.$emit("input", newVal);
+    localValue: {
+      deep: true,
+      handler(newVal) {
+        this.$emit("input", newVal);
+      }
+    },
+    value: {
+      deep: true,
+      handler(newValue) {
+        this.localValue = newValue;
+      }
     },
     selectedTypes() {
       this.search(this.searchQuery);
@@ -179,9 +197,16 @@ export default {
   max-width: 16rem;
 }
 
+.artist-top-toggle {
+  flex-shrink: 0;
+}
+
 @media not all and (max-width: 768px) {
   .type-select {
     margin-right: 0.5rem;
+  }
+  .artist-top-toggle {
+    margin-left: 0.5rem;
   }
 }
 
@@ -191,6 +216,9 @@ export default {
   }
   .type-select {
     margin-bottom: 0.5rem;
+  }
+  .artist-top-toggle {
+    margin-top: 0.5rem;
   }
 }
 
