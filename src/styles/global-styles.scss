@@ -1,0 +1,12 @@
+//$card-bg: #000;
+
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
+
+.multiselect__placeholder {
+  margin-bottom: 0;
+}
+
+.multiselect__content {
+  max-width: 100%;
+}

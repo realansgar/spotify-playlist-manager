@@ -3,8 +3,8 @@ import App from "./App.vue";
 import store from "./store";
 
 import BootstrapVue from "bootstrap-vue";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
+import "vue-multiselect/dist/vue-multiselect.min.css";
+import "./styles/global-styles.scss";
 import ToggleButton from "vue-js-toggle-button";
 
 Vue.use(BootstrapVue);

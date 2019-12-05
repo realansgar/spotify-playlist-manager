@@ -174,16 +174,6 @@ export default {
 };
 </script>
 
-<!--suppress HtmlUnknownTarget -->
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-
-<!--suppress CssUnusedSymbol -->
-<style>
-.multiselect__content {
-  max-width: 100%;
-}
-</style>
-
 <style scoped>
 .type-select {
   max-width: 16rem;
