@@ -19,11 +19,11 @@ const availableSources = [
     ]
   },
   {
-    id: "top",
+    id: "topTracksOrArtists",
     label: "Top Songs or Artists",
     inputs: [
       {
-        id: "type",
+        id: "typeTop",
         type: "select",
         label: "",
         options: [
@@ -62,7 +62,7 @@ const availableSources = [
 
 const availableFilters = [
   {
-    id: "in",
+    id: "songIn",
     label: "Song is in",
     inputs: [{ id: "source", type: "source" }]
   },

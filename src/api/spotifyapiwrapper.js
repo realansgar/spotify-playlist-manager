@@ -2,13 +2,14 @@ import SpotifyWebApi from "spotify-web-api-js";
 
 const GET_TRACKS_LIMIT = 50;
 const GET_ALBUMS_LIMIT = 20;
-const GET_ARTIST_LIMIT = 50;
+const GET_ARTISTS_LIMIT = 50;
+const GET_ARTIST_ALBUMS_LIMIT = 50;
 const GET_PLAYLISTS_LIMIT = 50;
 const SEARCH_LIMIT = 10;
 const LIMITS = {
   track: GET_TRACKS_LIMIT,
   album: GET_ALBUMS_LIMIT,
-  artist: GET_ARTIST_LIMIT
+  artist: GET_ARTISTS_LIMIT
 };
 
 const typeNames = {
@@ -85,7 +86,9 @@ s.getWholeRecentlyPlayedTracks = async function(
 
 s.getWholePlaylistTracks = async function(playlistId, options) {
   const paging = await s.getPlaylistTracks(playlistId, options);
-  return _getWholePagingUnwrapped(paging);
+  const result = await _getWholePagingUnwrapped(paging);
+  const playlistTracks = result.filter(x => !x.isLocal);
+  return playlistTracks.map(x => x.track);
 };
 
 s.getWholeMySavedTracks = async function(options) {
@@ -103,6 +106,35 @@ s.getWholeUserPlaylists = async function(
 ) {
   const paging = await s.getUserPlaylists(userId, options);
   return _getWholePagingUnwrapped(paging);
+};
+
+s.getWholeMyTopTracks = async function(options = { limit: GET_TRACKS_LIMIT }) {
+  const paging = await s.getMyTopTracks(options);
+  return _getWholePagingUnwrapped(paging);
+};
+
+s.getWholeMyTopArtists = async function(options = {}) {
+  options.limit = GET_ARTISTS_LIMIT;
+  const paging = await s.getMyTopArtists(options);
+  return _getWholePagingUnwrapped(paging);
+};
+
+s.getWholeArtistTopTracks = async function(artistId, countryCode, options) {
+  const result = await s.getArtistTopTracks(artistId, countryCode, options);
+  return result.tracks;
+};
+
+s.getWholeArtistAlbums = async function(artistId, options = {}) {
+  options.limit = GET_ARTIST_ALBUMS_LIMIT;
+  const paging = await s.getArtistAlbums(artistId, options);
+  return _getWholePagingUnwrapped(paging);
+};
+
+s.getWholeAlbumTracks = async function(albumId, options = {}) {
+  options.limit = GET_TRACKS_LIMIT;
+  const paging = await s.getAlbumTracks(albumId, options);
+  const result = await _getWholePagingUnwrapped(paging);
+  return _getFullObjects(result);
 };
 
 s.wholeSearch = async function(
