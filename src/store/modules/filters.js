@@ -5,11 +5,11 @@ const availableSources = [
     inputs: []
   },
   {
-    id: "recent_tracks",
+    id: "recentTracks",
     label: "Recently Played Songs",
     inputs: [
       {
-        id: "limit_recent",
+        id: "limitRecent",
         type: "number",
         label: "Amount",
         min: 0,
@@ -39,17 +39,17 @@ const availableSources = [
         required: true
       },
       {
-        id: "time_range",
+        id: "timeRange",
         type: "select",
         label: "time range",
         options: [
-          { label: "Short Term", id: "short_term" },
-          { label: "Medium Term", id: "medium_term" },
-          { label: "Long Term", id: "long_term" }
+          { label: "Short Term", id: "shortTerm" },
+          { label: "Medium Term", id: "mediumTerm" },
+          { label: "Long Term", id: "longTerm" }
         ],
         required: true
       },
-      { id: "limit_top", type: "number", label: "Amount", min: 0, max: 50 },
+      { id: "limitTop", type: "number", label: "Amount", min: 0, max: 50 },
       { id: "artistTop", type: "artistTop" }
     ]
   },
@@ -67,12 +67,12 @@ const availableFilters = [
     inputs: [{ id: "source", type: "source" }]
   },
   {
-    id: "name_match",
+    id: "nameMatch",
     label: "Song name matches",
-    inputs: [{ id: "match_string", label: "substring or regex", type: "text" }]
+    inputs: [{ id: "matchString", label: "substring or regex", type: "text" }]
   },
   {
-    id: "duration_ms",
+    id: "durationMs",
     label: "Song length",
     inputs: [
       { id: "min", label: "minimum length", type: "number", min: 0 },
