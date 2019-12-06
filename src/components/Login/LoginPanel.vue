@@ -13,6 +13,17 @@
       </template>
     </AppButtonListItem>
     <AppButtonListItem>
+      Read your private data (country, subscription status)
+      <template #button>
+        <div
+          v-b-tooltip.hover
+          title="Playlist Manager needs these permissions to determine your country for localised recommendations."
+        >
+          <ToggleButton class="no-margin-bottom" value disabled />
+        </div>
+      </template>
+    </AppButtonListItem>
+    <AppButtonListItem>
       Modify your public playlists
       <template #button>
         <div

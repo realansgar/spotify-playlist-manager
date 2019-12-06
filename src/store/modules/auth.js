@@ -1,5 +1,6 @@
 const state = {
   scopes: {
+    userReadPrivate: true,
     userReadRecentlyPlayed: false,
     userTopRead: false,
     userLibraryRead: false,
