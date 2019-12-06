@@ -1,8 +1,15 @@
 import SpotifyWebApi from "spotify-web-api-js";
 
 const GET_TRACKS_LIMIT = 50;
+const GET_ALBUMS_LIMIT = 20;
+const GET_ARTIST_LIMIT = 50;
 const GET_PLAYLISTS_LIMIT = 50;
 const SEARCH_LIMIT = 10;
+const LIMITS = {
+  track: GET_TRACKS_LIMIT,
+  album: GET_ALBUMS_LIMIT,
+  artist: GET_ARTIST_LIMIT
+};
 
 const typeNames = {
   artists: "Artists",
@@ -12,7 +19,19 @@ const typeNames = {
   user_playlist: "My Playlists"
 };
 
+const spotifyCache = {
+  library: null
+};
+
 const s = new SpotifyWebApi();
+
+window.s = s;
+
+const GET_MULTIPLE = {
+  track: s.getTracks,
+  album: s.getAlbums,
+  artist: s.getArtists
+};
 
 async function _getWholePagingUnwrapped(paging, max) {
   let total = paging.total;
@@ -29,16 +48,53 @@ async function _getWholePagingUnwrapped(paging, max) {
   return result.concat(pagings.flatMap(paging => paging.items));
 }
 
+async function _getFullObjects(array) {
+  const requestIdLists = { album: [], artist: [], track: [] };
+  const requests = [];
+  let result = [];
+  for (const item of array) {
+    if (spotifyCache[item.uri]) {
+      result.push(spotifyCache[item.uri]);
+    } else {
+      requestIdLists[item.type].push(item.id);
+    }
+  }
+  for (const key of Object.keys(requestIdLists)) {
+    for (let i = 0; i < requestIdLists[key].length; i += LIMITS[key]) {
+      const ids = requestIdLists[key].slice(i, i + LIMITS[key]);
+      requests.push(GET_MULTIPLE[key](ids));
+    }
+  }
+  const responses = await Promise.all(requests);
+  result = result.concat(responses.flatMap(x => Object.values(x)[0]));
+  result.forEach(item => spotifyCache[item.uri] = item);
+  return result;
+}
+
+s.getWholeRecentlyPlayedTracks = async function(
+  options = { limit: GET_TRACKS_LIMIT }
+) {
+  if (!spotifyCache.recentlyPlayedTracks) {
+    const paging = await s.getMyRecentlyPlayedTracks(options);
+    let simpleRecentlyPlayedTracks = await _getWholePagingUnwrapped(paging);
+    simpleRecentlyPlayedTracks = simpleRecentlyPlayedTracks.map(x => x.track);
+    spotifyCache.recentlyPlayedTracks = _getFullObjects(simpleRecentlyPlayedTracks);
+  }
+  return spotifyCache.recentlyPlayedTracks;
+};
+
 s.getWholePlaylistTracks = async function(playlistId, options) {
   const paging = await s.getPlaylistTracks(playlistId, options);
   return _getWholePagingUnwrapped(paging);
 };
 
-s.getWholeMySavedTracks = async function(
-  options = { limit: GET_TRACKS_LIMIT }
-) {
-  const paging = await s.getMySavedTracks(options);
-  return _getWholePagingUnwrapped(paging);
+s.getWholeMySavedTracks = async function(options) {
+  if (!spotifyCache.library) {
+    const paging = await s.getMySavedTracks(options);
+    const savedTracks = await _getWholePagingUnwrapped(paging);
+    spotifyCache.library = savedTracks.map(x => x.track);
+  }
+  return spotifyCache.library;
 };
 
 s.getWholeUserPlaylists = async function(
