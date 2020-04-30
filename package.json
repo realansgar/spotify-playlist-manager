@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.1.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jsonschema": "^1.2.5",
     "spotify-web-api-js": "^1.2.0",
     "vue": "^2.6.10",
