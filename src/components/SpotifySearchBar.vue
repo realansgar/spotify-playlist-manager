@@ -53,7 +53,7 @@
     <b-form-checkbox
       class="artist-top-toggle"
       v-if="localValue && localValue.type === 'artist'"
-      @input="$set(localValue, 'artistTop', $event)"
+      v-model="localValue['artistTop']"
       button
       button-variant="outline-primary"
     >
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import s from "../api/spotifyapiwrapper";
 import MultiSelect from "vue-multiselect";
 import SpotifyObject from "../basecomponents/SpotifyObject";
 
@@ -128,8 +128,7 @@ export default {
     selectedTypesValue() {
       if (this.selectedTypes.length === 0) return undefined;
       return this.selectedTypes.map(x => x.value);
-    },
-    ...mapState("songs", { s: "s" })
+    }
   },
   watch: {
     localValue: {
@@ -167,10 +166,7 @@ export default {
       }
       this._lastChanged = setTimeout(async () => {
         try {
-          const result = await this.s.wholeSearch(
-            query,
-            this.selectedTypesValue
-          );
+          const result = await s.wholeSearch(query, this.selectedTypesValue);
           if (this.searchQuery) {
             this.options = result.filter(x => x.items[0] !== undefined);
           }

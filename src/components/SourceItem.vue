@@ -6,13 +6,13 @@
       :searchable="false"
       :allow-empty="false"
       placeholder="Source Types"
-      v-model="localValue.source"
+      v-model="localValue.sourceType"
       :options="availableSources"
       label="label"
     />
     <div
       class="mb-2"
-      v-for="input in localValue.source ? localValue.source.inputs : []"
+      v-for="input in localValue.sourceType ? localValue.sourceType.inputs : []"
       :key="input.id"
     >
       <b-input
@@ -45,20 +45,19 @@
         class="artist-top-toggle"
         v-if="
           input.type === 'artistTop' &&
-            localValue.type &&
-            localValue.type.id === 'artists'
+            localValue['typeTop'] &&
+            localValue['typeTop'].id === 'artists'
         "
-        @input="$set(localValue, 'artistTop', $event)"
+        v-model="localValue['artistTop']"
         button
         button-variant="outline-primary"
       >
-        {{ localValue.artistTop ? "Top Songs" : "All Songs" }}
+        {{ localValue['artistTop'] ? "Top Songs" : "All Songs" }}
       </b-form-checkbox>
     </div>
     <b-button
       v-if="!hideDisabled"
       variant="danger"
-      :disabled="deleteDisabled"
       @click="$emit('delete', localValue)"
     >
       Delete
@@ -76,10 +75,6 @@ export default {
   components: { MultiSelect, SpotifySearchBar },
   props: {
     value: Object,
-    deleteDisabled: {
-      type: Boolean,
-      default: false
-    },
     hideDisabled: {
       type: Boolean,
       default: false

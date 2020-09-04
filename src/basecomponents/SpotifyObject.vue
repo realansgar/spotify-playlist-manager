@@ -5,7 +5,7 @@
     </div>
   </div>
   <div class="option" v-else>
-    <b-img-lazy class="option__image" :src="imageSrc"></b-img-lazy>
+    <b-img-lazy @click.native="$emit('image-clicked')" class="option__image" :src="imageSrc"></b-img-lazy>
     <div class="option__desc">
       <span class="option__title">{{ option.name }}</span>
       <br />

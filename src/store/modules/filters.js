@@ -43,9 +43,9 @@ const availableSources = [
         type: "select",
         label: "time range",
         options: [
-          { label: "Short Term", id: "shortTerm" },
-          { label: "Medium Term", id: "mediumTerm" },
-          { label: "Long Term", id: "longTerm" }
+          { label: "Short Term", id: "short_term" },
+          { label: "Medium Term", id: "medium_term" },
+          { label: "Long Term", id: "long_term" }
         ],
         required: true
       },
@@ -75,8 +75,8 @@ const availableFilters = [
     id: "durationMs",
     label: "Song length",
     inputs: [
-      { id: "min", label: "minimum length", type: "number", min: 0 },
-      { id: "max", label: "maximum length", type: "number", min: 0 }
+      { id: "min", label: "minimum length in sec", type: "number", min: 0 },
+      { id: "max", label: "maximum length in sec", type: "number", min: 0 }
     ]
   },
   {
@@ -105,12 +105,7 @@ const state = {
   availableSources,
   availableFilters,
   sources: [{ _id: Date.now() }],
-  filters: [{ _id: Date.now(), source: {} }]
-};
-
-const getters = {
-  getArrayIndex: state => (array, object) =>
-    state[array].findIndex(x => x._id === object._id)
+  filters: []
 };
 
 const mutations = {
@@ -143,7 +138,6 @@ const actions = {};
 export default {
   namespaced: true,
   state,
-  getters,
   actions,
   mutations
 };

@@ -9,7 +9,9 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "async-es": "^3.1.0",
     "bootstrap-vue": "^2.1.0",
+    "bottleneck": "^2.19.5",
     "jquery": "^3.4.1",
     "jsonschema": "^1.2.5",
     "spotify-web-api-js": "^1.2.0",

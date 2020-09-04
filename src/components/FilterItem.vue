@@ -4,22 +4,27 @@
       class="mb-2"
       style="display: flex; flex-direction: row; align-items: center;"
     >
-      <b-form-checkbox class="mr-2" button button-variant="outline-danger"
-        >NOT</b-form-checkbox
+      <b-form-checkbox
+        class="mr-2"
+        button
+        button-variant="outline-danger"
+        v-model="localValue.not"
       >
+        NOT
+      </b-form-checkbox>
       <MultiSelect
         :show-labels="false"
         :searchable="false"
         :allow-empty="false"
         placeholder="Filter Types"
-        v-model="localValue.filter"
+        v-model="localValue.filterType"
         :options="availableFilters"
         label="label"
       />
     </div>
     <div
       class="mb-2"
-      v-for="input in localValue.filter ? localValue.filter.inputs : []"
+      v-for="input in localValue.filterType ? localValue.filterType.inputs : []"
       :key="input.id"
     >
       <b-input
@@ -40,7 +45,6 @@
     </div>
     <b-button
       variant="danger"
-      :disabled="deleteDisabled"
       @click="$emit('delete', localValue)"
     >
       Delete
@@ -56,11 +60,7 @@ export default {
   name: "FilterItem",
   components: { SourceItem, MultiSelect },
   props: {
-    value: Object,
-    deleteDisabled: {
-      type: Boolean,
-      default: false
-    }
+    value: Object
   },
   data() {
     return {
